@@ -90,9 +90,17 @@ Capabilities represent the "What" the system or team can do.
 
 ## 4. Skill Library (`/aios/skills/`)
 
-Skills define "How" an AI executes a capability.
+Skills define "How" an AI executes a capability. To ensure Agents know *when* and *how to prioritize* their abilities, skills are categorized into **AI Skill Levels**:
 
-**Example: `Skill-Review-PR`**
+### 4.1 AI Skill Levels
+*   **Foundation Skills**: Basic abilities required for all agents (e.g., `Analyze Requirement`, `Read Context`, `Write Markdown`, `Follow Naming Convention`).
+*   **Core Engineering Skills**: Domain-specific implementation skills (e.g., `Design REST API`, `Design Database`, `Flutter Feature Design`, `Backend Module Design`).
+*   **Review Skills**: Quality control and auditing skills (e.g., `Architecture Review`, `Security Review`, `Performance Review`, `Documentation Review`).
+*   **Decision Skills**: Analytical skills for choices and trade-offs (e.g., `Create ADR`, `Impact Analysis`, `Risk Assessment`, `Trade-off Analysis`).
+*   **Automation Skills**: Repetitive generation and sync tasks (e.g., `Generate Backlog`, `Generate Test Cases`, `Generate Release Notes`, `Synchronize Knowledge`).
+
+### 4.2 Skill Definition Format
+**Example: `Skill-Review-PR` (Level: Review Skills)**
 *   **Metadata**: Version 1.0, Owner: QA/Architecture.
 *   **Purpose**: Review code for style, security, and architectural compliance.
 *   **Applicable Roles**: AI Reviewer, Software Architect.
