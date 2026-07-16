@@ -1,0 +1,52 @@
+{
+  "elements": {
+    "WorkOrdersDao": {
+      "id": {
+        "library_uri": "package:fsp_mobile/core/database/daos/work_orders_dao.dart",
+        "name": "WorkOrdersDao"
+      },
+      "declaration": {
+        "source_uri": "package:fsp_mobile/core/database/daos/work_orders_dao.dart",
+        "offset": 263,
+        "name": "WorkOrdersDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:fsp_mobile/core/database/app_database.dart",
+          "name": "local_work_orders"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:fsp_mobile/core/database/app_database.dart",
+          "name": "local_work_orders"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "WorkOrdersDao",
+            "import_uri": "package:fsp_mobile/core/database/daos/work_orders_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:fsp_mobile/core/database/app_database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:fsp_mobile/core/database/app_database.dart",
+    "package:fsp_mobile/features/work_orders/domain/models/work_order_model.dart"
+  ]
+}

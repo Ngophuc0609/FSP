@@ -1,0 +1,11 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/material.dart",
+    "package:flutter_riverpod/flutter_riverpod.dart",
+    "package:fsp_mobile/features/work_orders/domain/models/work_order_model.dart",
+    "package:fsp_mobile/features/work_orders/presentation/providers/work_order_providers.dart",
+    "package:fsp_mobile/features/work_orders/presentation/widgets/sync_status_bar.dart",
+    "package:fsp_mobile/features/work_orders/presentation/screens/work_order_create_screen.dart"
+  ]
+}

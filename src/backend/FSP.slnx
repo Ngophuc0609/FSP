@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FSP.Api/FSP.Api.csproj" />
+  <Project Path="FSP.Application/FSP.Application.csproj" />
+  <Project Path="FSP.Domain/FSP.Domain.csproj" />
+  <Project Path="FSP.Infrastructure/FSP.Infrastructure.csproj" />
+</Solution>

@@ -1,0 +1,17 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'work_orders_dao.dart';
+
+// ignore_for_file: type=lint
+mixin _$WorkOrdersDaoMixin on DatabaseAccessor<AppDatabase> {
+  $LocalWorkOrdersTable get localWorkOrders => attachedDatabase.localWorkOrders;
+  WorkOrdersDaoManager get managers => WorkOrdersDaoManager(this);
+}
+
+class WorkOrdersDaoManager {
+  final _$WorkOrdersDaoMixin _db;
+  WorkOrdersDaoManager(this._db);
+  $$LocalWorkOrdersTableTableManager get localWorkOrders =>
+      $$LocalWorkOrdersTableTableManager(
+          _db.attachedDatabase, _db.localWorkOrders);
+}

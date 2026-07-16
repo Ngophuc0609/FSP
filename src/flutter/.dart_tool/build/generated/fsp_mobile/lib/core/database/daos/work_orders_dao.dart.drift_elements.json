@@ -1,0 +1,1 @@
+{"valid_import":true,"imports":[{"uri":"package:drift/drift.dart","transitive":false},{"uri":"package:fsp_mobile/core/database/app_database.dart","transitive":false},{"uri":"package:fsp_mobile/features/work_orders/domain/models/work_order_model.dart","transitive":false}],"elements":[{"kind":"databaseAccessor","name":"WorkOrdersDao","dart_name":"WorkOrdersDao"}]}

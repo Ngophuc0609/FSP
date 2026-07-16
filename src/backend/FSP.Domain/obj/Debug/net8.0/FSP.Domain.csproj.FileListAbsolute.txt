@@ -1,0 +1,13 @@
+D:\Workspace\work\FSP\src\backend\FSP.Domain\bin\Debug\net8.0\FSP.Domain.deps.json
+D:\Workspace\work\FSP\src\backend\FSP.Domain\bin\Debug\net8.0\FSP.Domain.dll
+D:\Workspace\work\FSP\src\backend\FSP.Domain\bin\Debug\net8.0\FSP.Domain.pdb
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.AssemblyInfoInputs.cache
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.AssemblyInfo.cs
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.csproj.CoreCompileInputs.cache
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.sourcelink.json
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.dll
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\refint\FSP.Domain.dll
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.pdb
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\ref\FSP.Domain.dll
+D:\Workspace\work\FSP\src\backend\FSP.Domain\obj\Debug\net8.0\FSP.Domain.csproj.AssemblyReference.cache

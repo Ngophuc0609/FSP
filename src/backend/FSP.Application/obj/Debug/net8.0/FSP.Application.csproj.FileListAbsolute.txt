@@ -1,0 +1,16 @@
+D:\Workspace\work\FSP\src\backend\FSP.Application\bin\Debug\net8.0\FSP.Application.deps.json
+D:\Workspace\work\FSP\src\backend\FSP.Application\bin\Debug\net8.0\FSP.Application.dll
+D:\Workspace\work\FSP\src\backend\FSP.Application\bin\Debug\net8.0\FSP.Application.pdb
+D:\Workspace\work\FSP\src\backend\FSP.Application\bin\Debug\net8.0\FSP.Domain.dll
+D:\Workspace\work\FSP\src\backend\FSP.Application\bin\Debug\net8.0\FSP.Domain.pdb
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.csproj.AssemblyReference.cache
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.AssemblyInfoInputs.cache
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.AssemblyInfo.cs
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.csproj.CoreCompileInputs.cache
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.sourcelink.json
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Appl.7855869A.Up2Date
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.dll
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\refint\FSP.Application.dll
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\FSP.Application.pdb
+D:\Workspace\work\FSP\src\backend\FSP.Application\obj\Debug\net8.0\ref\FSP.Application.dll
