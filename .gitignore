@@ -1,0 +1,28 @@
+# =========================
+# Backend (.NET / C#)
+# =========================
+**/bin/
+**/obj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+appsettings.Development.json
+
+# =========================
+# Flutter / Dart
+# =========================
+**/.dart_tool/
+**/build/
+**/.pub-cache/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+
+# =========================
+# OS & Editor
+# =========================
+.DS_Store
+.vscode/
+.idea/
+*.swp

@@ -1,8 +1,0 @@
-{
-  "elements": {},
-  "imports": [
-    "package:fsp_mobile/core/network/api_client.dart",
-    "package:fsp_mobile/features/work_orders/domain/models/work_order_model.dart",
-    "package:fsp_mobile/features/work_orders/domain/repositories/i_work_order_repository.dart"
-  ]
-}
