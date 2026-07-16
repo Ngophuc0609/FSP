@@ -60,6 +60,20 @@ terms:
     relations:
       belongs_to: [Customer]
       has_many: [WorkOrder, Asset]
+
+  - id: TRM-BUS-008
+    term: SLA Policy
+    definition: "A set of rules defining the target response and resolution times for a Work Order based on business hours and holiday calendars."
+    attributes: [id, name, target_response_minutes, target_resolution_minutes, calendar_id]
+    relations:
+      has_many: [WorkOrder]
+
+  - id: TRM-BUS-009
+    term: SLA Tracker
+    definition: "A monitoring record attached to a Work Order that tracks the accumulated working minutes and next SLA checkpoint, factoring in pauses and business hours."
+    attributes: [status, accumulated_working_minutes, next_checkpoint_utc, warning_notified_utc, breach_notified_utc]
+    relations:
+      belongs_to: [WorkOrder]
 ---
 
 # Business Ontology & Domain Vocabulary

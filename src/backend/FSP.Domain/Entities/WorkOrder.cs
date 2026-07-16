@@ -8,10 +8,13 @@ namespace FSP.Domain.Entities;
 public enum WorkOrderStatus
 {
     Draft = 0,
-    Assigned = 1,
-    InProgress = 2,
-    Completed = 3,
-    Cancelled = 4
+    PendingDispatch = 1,
+    Assigned = 2,
+    EnRoute = 3,
+    InProgress = 4,
+    OnHold = 5,
+    Completed = 6,
+    Cancelled = 7
 }
 
 public enum WorkOrderPriority
@@ -44,6 +47,9 @@ public class WorkOrder : BaseTenantEntity
     /// EF Core RowVersion token for optimistic concurrency verification per DEC-WO-004.
     /// </summary>
     public byte[] RowVersion { get; private set; } = Array.Empty<byte>();
+
+    public Guid? SlaPolicyId { get; private set; }
+    public WorkOrderSlaTracker? SlaTracker { get; private set; }
 
     public IReadOnlyCollection<WorkOrderAttachment> Attachments => _attachments.AsReadOnly();
 
@@ -92,5 +98,23 @@ public class WorkOrder : BaseTenantEntity
     {
         if (attachment == null) throw new ArgumentNullException(nameof(attachment));
         _attachments.Add(attachment);
+    }
+
+    public void ApplySlaPolicy(Guid slaPolicyId, DateTime? initialCheckpoint)
+    {
+        SlaPolicyId = slaPolicyId;
+        SlaTracker = new WorkOrderSlaTracker(initialCheckpoint);
+        LastModifiedAtUtc = DateTime.UtcNow;
+    }
+
+    public void PauseForCustomer(Guid modifiedBy)
+    {
+        if (Status == WorkOrderStatus.Completed || Status == WorkOrderStatus.Cancelled)
+            throw new InvalidOperationException("Cannot pause a completed or cancelled work order.");
+
+        Status = WorkOrderStatus.OnHold;
+        SlaTracker?.UpdateStatus(SlaStatus.Paused);
+        LastModifiedAtUtc = DateTime.UtcNow;
+        LastModifiedBy = modifiedBy;
     }
 }

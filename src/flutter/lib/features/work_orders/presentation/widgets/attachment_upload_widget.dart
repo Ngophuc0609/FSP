@@ -27,8 +27,22 @@ class _AttachmentUploadWidgetState extends ConsumerState<AttachmentUploadWidget>
   final List<UploadedAttachmentItem> _attachments = [];
   bool _isUploading = false;
   String? _uploadStatusText;
+  
+  // Phase 2: SLA & Queue Constraints
+  bool _keepHighRes = false;
+  double _localQueueSizeMb = 0.0;
+  final double _maxQueueSizeMb = 50.0;
 
   Future<void> _pickAndUploadAttachment() async {
+    if (_localQueueSizeMb >= _maxQueueSizeMb) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Hàng đợi offline đã đầy (50MB). Vui lòng kết nối mạng để đồng bộ.'), backgroundColor: Colors.red),
+        );
+      }
+      return;
+    }
+
     setState(() {
       _isUploading = true;
       _uploadStatusText = 'Đang xin Pre-Signed URL từ máy chủ...';
@@ -37,11 +51,22 @@ class _AttachmentUploadWidgetState extends ConsumerState<AttachmentUploadWidget>
     try {
       final apiClient = ref.read(apiClientProvider);
 
-      // Simulated field capture photo sample per DEC-WO-005 (in production connects to image_picker / camera)
+      // Simulated field capture photo sample per DEC-WO-005
       final sampleFileName = 'field_inspection_${DateTime.now().millisecondsSinceEpoch}.jpg';
       final sampleBytes = utf8.encode('SIMULATED_BINARY_IMAGE_DATA_FIELD_SERVICE_PLATFORM');
-      final sampleSizeBytes = sampleBytes.length;
+      
+      // Phase 2: Compression constraint
+      int simulatedSizeBytes = _keepHighRes ? 8500000 : 850000; // 8.5MB vs 850KB
+      
+      final sampleSizeBytes = simulatedSizeBytes;
       final sampleHash = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+
+      // Simulate offline queue filling up if network fails
+      // For demonstration, we assume it's queued if network is bad, but here we just upload directly.
+      // If upload fails, we would add to queue. We simulate queue size increase.
+      setState(() {
+        _localQueueSizeMb += (sampleSizeBytes / 1024 / 1024);
+      });
 
       // 1. Request Pre-Signed upload URL from backend
       final preSignedResponse = await apiClient.client.post(
@@ -177,6 +202,50 @@ class _AttachmentUploadWidgetState extends ConsumerState<AttachmentUploadWidget>
               ],
             ),
           ),
+          const SizedBox(height: 12),
+        ],
+        
+        // Phase 2: High-Res Toggle
+        SwitchListTile(
+          title: const Text('Giữ ảnh gốc (High-Res)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          subtitle: const Text('Sử dụng cho mã vạch hoặc chi tiết nhỏ', style: TextStyle(fontSize: 11)),
+          value: _keepHighRes,
+          onChanged: _isUploading ? null : (val) => setState(() => _keepHighRes = val),
+          contentPadding: EdgeInsets.zero,
+          dense: true,
+        ),
+        
+        // Phase 2: Queue Size Indicator
+        if (_localQueueSizeMb > 0) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Bộ nhớ đệm (Queue)', style: TextStyle(fontSize: 11, color: Colors.grey.shade700)),
+              Text('${_localQueueSizeMb.toStringAsFixed(1)} / ${_maxQueueSizeMb.toStringAsFixed(0)} MB', 
+                style: TextStyle(
+                  fontSize: 11, 
+                  fontWeight: FontWeight.bold,
+                  color: _localQueueSizeMb >= (_maxQueueSizeMb * 0.8) ? Colors.orange.shade800 : Colors.blue.shade700
+                )
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          LinearProgressIndicator(
+            value: (_localQueueSizeMb / _maxQueueSizeMb).clamp(0.0, 1.0),
+            backgroundColor: Colors.grey.shade200,
+            color: _localQueueSizeMb >= (_maxQueueSizeMb * 0.8) ? Colors.orange : Colors.blue,
+          ),
+          if (_localQueueSizeMb >= (_maxQueueSizeMb * 0.8)) ...[
+            const SizedBox(height: 4),
+            Text(
+              _localQueueSizeMb >= _maxQueueSizeMb 
+                ? 'Hàng đợi đã đầy. Không thể lưu thêm ảnh offline.'
+                : 'Cảnh báo: Bộ nhớ tạm sắp đầy (80%).',
+              style: TextStyle(fontSize: 11, color: _localQueueSizeMb >= _maxQueueSizeMb ? Colors.red : Colors.orange.shade800),
+            )
+          ],
           const SizedBox(height: 12),
         ],
         // Enforce minimum 48x48 touch target per RULE-FLUTTER-003 for field gloves

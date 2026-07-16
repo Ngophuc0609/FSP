@@ -18,6 +18,7 @@ public class FspDbContext : DbContext, IApplicationDbContext
     public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<WorkOrderAttachment> WorkOrderAttachments => Set<WorkOrderAttachment>();
+    public DbSet<SlaPolicy> SlaPolicies => Set<SlaPolicy>();
 
     public FspDbContext(
         DbContextOptions<FspDbContext> options, 
@@ -37,6 +38,7 @@ public class FspDbContext : DbContext, IApplicationDbContext
         modelBuilder.Entity<WorkOrder>().HasQueryFilter(w => w.TenantId == _tenantProvider.TenantId);
         modelBuilder.Entity<WorkOrderAttachment>().HasQueryFilter(a => a.TenantId == _tenantProvider.TenantId);
         modelBuilder.Entity<Tenant>().HasQueryFilter(t => t.Id == _tenantProvider.TenantId);
+        modelBuilder.Entity<SlaPolicy>().HasQueryFilter(s => s.TenantId == _tenantProvider.TenantId);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

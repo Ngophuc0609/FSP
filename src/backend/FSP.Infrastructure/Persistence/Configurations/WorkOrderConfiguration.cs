@@ -46,6 +46,24 @@ public class WorkOrderConfiguration : IEntityTypeConfiguration<WorkOrder>
             .IsRowVersion()
             .IsRequired();
 
+        builder.OwnsOne(w => w.SlaTracker, tracker =>
+        {
+            tracker.Property(t => t.Status).HasColumnName("SlaStatus");
+            tracker.Property(t => t.AccumulatedWorkingMinutes).HasColumnName("SlaAccumulatedMinutes");
+            tracker.Property(t => t.NextCheckpointUtc).HasColumnName("SlaNextCheckpointUtc");
+            tracker.Property(t => t.WarningNotifiedUtc).HasColumnName("SlaWarningNotifiedUtc");
+            tracker.Property(t => t.BreachNotifiedUtc).HasColumnName("SlaBreachNotifiedUtc");
+            
+            // SLA Sweep index: Used by Background Worker to find jobs near their checkpoint
+            tracker.HasIndex(t => t.NextCheckpointUtc)
+                .HasDatabaseName("IX_WorkOrders_SlaSweep");
+        });
+
+        builder.HasOne<SlaPolicy>()
+            .WithMany()
+            .HasForeignKey(w => w.SlaPolicyId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         builder.HasMany(w => w.Attachments)
             .WithOne()
             .HasForeignKey(a => a.WorkOrderId)

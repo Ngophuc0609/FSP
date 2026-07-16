@@ -20,6 +20,11 @@ class LocalWorkOrders extends Table {
   IntColumn get syncStatus => integer().withDefault(const Constant(0))(); // 0 = Synced, 1 = Pending Sync, 2 = Sync Error/Conflict
   TextColumn get syncErrorMessage => text().nullable()();
   TextColumn get rowVersion => text().nullable()();
+  
+  // SLA Properties (Phase 2)
+  IntColumn get slaStatus => integer().nullable()();
+  DateTimeColumn get slaNextCheckpointUtc => dateTime().nullable()();
+  IntColumn get slaAccumulatedMinutes => integer().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};

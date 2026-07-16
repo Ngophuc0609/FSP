@@ -76,6 +76,24 @@ class $LocalWorkOrdersTable extends LocalWorkOrders
   late final GeneratedColumn<String> rowVersion = GeneratedColumn<String>(
       'row_version', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _slaStatusMeta =
+      const VerificationMeta('slaStatus');
+  @override
+  late final GeneratedColumn<int> slaStatus = GeneratedColumn<int>(
+      'sla_status', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _slaNextCheckpointUtcMeta =
+      const VerificationMeta('slaNextCheckpointUtc');
+  @override
+  late final GeneratedColumn<DateTime> slaNextCheckpointUtc =
+      GeneratedColumn<DateTime>('sla_next_checkpoint_utc', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _slaAccumulatedMinutesMeta =
+      const VerificationMeta('slaAccumulatedMinutes');
+  @override
+  late final GeneratedColumn<int> slaAccumulatedMinutes = GeneratedColumn<int>(
+      'sla_accumulated_minutes', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -88,7 +106,10 @@ class $LocalWorkOrdersTable extends LocalWorkOrders
         clientReferenceId,
         syncStatus,
         syncErrorMessage,
-        rowVersion
+        rowVersion,
+        slaStatus,
+        slaNextCheckpointUtc,
+        slaAccumulatedMinutes
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -167,6 +188,22 @@ class $LocalWorkOrdersTable extends LocalWorkOrders
           rowVersion.isAcceptableOrUnknown(
               data['row_version']!, _rowVersionMeta));
     }
+    if (data.containsKey('sla_status')) {
+      context.handle(_slaStatusMeta,
+          slaStatus.isAcceptableOrUnknown(data['sla_status']!, _slaStatusMeta));
+    }
+    if (data.containsKey('sla_next_checkpoint_utc')) {
+      context.handle(
+          _slaNextCheckpointUtcMeta,
+          slaNextCheckpointUtc.isAcceptableOrUnknown(
+              data['sla_next_checkpoint_utc']!, _slaNextCheckpointUtcMeta));
+    }
+    if (data.containsKey('sla_accumulated_minutes')) {
+      context.handle(
+          _slaAccumulatedMinutesMeta,
+          slaAccumulatedMinutes.isAcceptableOrUnknown(
+              data['sla_accumulated_minutes']!, _slaAccumulatedMinutesMeta));
+    }
     return context;
   }
 
@@ -198,6 +235,13 @@ class $LocalWorkOrdersTable extends LocalWorkOrders
           DriftSqlType.string, data['${effectivePrefix}sync_error_message']),
       rowVersion: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}row_version']),
+      slaStatus: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sla_status']),
+      slaNextCheckpointUtc: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}sla_next_checkpoint_utc']),
+      slaAccumulatedMinutes: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}sla_accumulated_minutes']),
     );
   }
 
@@ -219,6 +263,9 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
   final int syncStatus;
   final String? syncErrorMessage;
   final String? rowVersion;
+  final int? slaStatus;
+  final DateTime? slaNextCheckpointUtc;
+  final int? slaAccumulatedMinutes;
   const LocalWorkOrder(
       {required this.id,
       required this.tenantId,
@@ -230,7 +277,10 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
       required this.clientReferenceId,
       required this.syncStatus,
       this.syncErrorMessage,
-      this.rowVersion});
+      this.rowVersion,
+      this.slaStatus,
+      this.slaNextCheckpointUtc,
+      this.slaAccumulatedMinutes});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -248,6 +298,15 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
     }
     if (!nullToAbsent || rowVersion != null) {
       map['row_version'] = Variable<String>(rowVersion);
+    }
+    if (!nullToAbsent || slaStatus != null) {
+      map['sla_status'] = Variable<int>(slaStatus);
+    }
+    if (!nullToAbsent || slaNextCheckpointUtc != null) {
+      map['sla_next_checkpoint_utc'] = Variable<DateTime>(slaNextCheckpointUtc);
+    }
+    if (!nullToAbsent || slaAccumulatedMinutes != null) {
+      map['sla_accumulated_minutes'] = Variable<int>(slaAccumulatedMinutes);
     }
     return map;
   }
@@ -269,6 +328,15 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
       rowVersion: rowVersion == null && nullToAbsent
           ? const Value.absent()
           : Value(rowVersion),
+      slaStatus: slaStatus == null && nullToAbsent
+          ? const Value.absent()
+          : Value(slaStatus),
+      slaNextCheckpointUtc: slaNextCheckpointUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(slaNextCheckpointUtc),
+      slaAccumulatedMinutes: slaAccumulatedMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(slaAccumulatedMinutes),
     );
   }
 
@@ -287,6 +355,11 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
       syncStatus: serializer.fromJson<int>(json['syncStatus']),
       syncErrorMessage: serializer.fromJson<String?>(json['syncErrorMessage']),
       rowVersion: serializer.fromJson<String?>(json['rowVersion']),
+      slaStatus: serializer.fromJson<int?>(json['slaStatus']),
+      slaNextCheckpointUtc:
+          serializer.fromJson<DateTime?>(json['slaNextCheckpointUtc']),
+      slaAccumulatedMinutes:
+          serializer.fromJson<int?>(json['slaAccumulatedMinutes']),
     );
   }
   @override
@@ -304,6 +377,10 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
       'syncStatus': serializer.toJson<int>(syncStatus),
       'syncErrorMessage': serializer.toJson<String?>(syncErrorMessage),
       'rowVersion': serializer.toJson<String?>(rowVersion),
+      'slaStatus': serializer.toJson<int?>(slaStatus),
+      'slaNextCheckpointUtc':
+          serializer.toJson<DateTime?>(slaNextCheckpointUtc),
+      'slaAccumulatedMinutes': serializer.toJson<int?>(slaAccumulatedMinutes),
     };
   }
 
@@ -318,7 +395,10 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
           String? clientReferenceId,
           int? syncStatus,
           Value<String?> syncErrorMessage = const Value.absent(),
-          Value<String?> rowVersion = const Value.absent()}) =>
+          Value<String?> rowVersion = const Value.absent(),
+          Value<int?> slaStatus = const Value.absent(),
+          Value<DateTime?> slaNextCheckpointUtc = const Value.absent(),
+          Value<int?> slaAccumulatedMinutes = const Value.absent()}) =>
       LocalWorkOrder(
         id: id ?? this.id,
         tenantId: tenantId ?? this.tenantId,
@@ -333,6 +413,13 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
             ? syncErrorMessage.value
             : this.syncErrorMessage,
         rowVersion: rowVersion.present ? rowVersion.value : this.rowVersion,
+        slaStatus: slaStatus.present ? slaStatus.value : this.slaStatus,
+        slaNextCheckpointUtc: slaNextCheckpointUtc.present
+            ? slaNextCheckpointUtc.value
+            : this.slaNextCheckpointUtc,
+        slaAccumulatedMinutes: slaAccumulatedMinutes.present
+            ? slaAccumulatedMinutes.value
+            : this.slaAccumulatedMinutes,
       );
   LocalWorkOrder copyWithCompanion(LocalWorkOrdersCompanion data) {
     return LocalWorkOrder(
@@ -354,6 +441,13 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
           : this.syncErrorMessage,
       rowVersion:
           data.rowVersion.present ? data.rowVersion.value : this.rowVersion,
+      slaStatus: data.slaStatus.present ? data.slaStatus.value : this.slaStatus,
+      slaNextCheckpointUtc: data.slaNextCheckpointUtc.present
+          ? data.slaNextCheckpointUtc.value
+          : this.slaNextCheckpointUtc,
+      slaAccumulatedMinutes: data.slaAccumulatedMinutes.present
+          ? data.slaAccumulatedMinutes.value
+          : this.slaAccumulatedMinutes,
     );
   }
 
@@ -370,7 +464,10 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
           ..write('clientReferenceId: $clientReferenceId, ')
           ..write('syncStatus: $syncStatus, ')
           ..write('syncErrorMessage: $syncErrorMessage, ')
-          ..write('rowVersion: $rowVersion')
+          ..write('rowVersion: $rowVersion, ')
+          ..write('slaStatus: $slaStatus, ')
+          ..write('slaNextCheckpointUtc: $slaNextCheckpointUtc, ')
+          ..write('slaAccumulatedMinutes: $slaAccumulatedMinutes')
           ..write(')'))
         .toString();
   }
@@ -387,7 +484,10 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
       clientReferenceId,
       syncStatus,
       syncErrorMessage,
-      rowVersion);
+      rowVersion,
+      slaStatus,
+      slaNextCheckpointUtc,
+      slaAccumulatedMinutes);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -402,7 +502,10 @@ class LocalWorkOrder extends DataClass implements Insertable<LocalWorkOrder> {
           other.clientReferenceId == this.clientReferenceId &&
           other.syncStatus == this.syncStatus &&
           other.syncErrorMessage == this.syncErrorMessage &&
-          other.rowVersion == this.rowVersion);
+          other.rowVersion == this.rowVersion &&
+          other.slaStatus == this.slaStatus &&
+          other.slaNextCheckpointUtc == this.slaNextCheckpointUtc &&
+          other.slaAccumulatedMinutes == this.slaAccumulatedMinutes);
 }
 
 class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
@@ -417,6 +520,9 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
   final Value<int> syncStatus;
   final Value<String?> syncErrorMessage;
   final Value<String?> rowVersion;
+  final Value<int?> slaStatus;
+  final Value<DateTime?> slaNextCheckpointUtc;
+  final Value<int?> slaAccumulatedMinutes;
   final Value<int> rowid;
   const LocalWorkOrdersCompanion({
     this.id = const Value.absent(),
@@ -430,6 +536,9 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
     this.syncStatus = const Value.absent(),
     this.syncErrorMessage = const Value.absent(),
     this.rowVersion = const Value.absent(),
+    this.slaStatus = const Value.absent(),
+    this.slaNextCheckpointUtc = const Value.absent(),
+    this.slaAccumulatedMinutes = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LocalWorkOrdersCompanion.insert({
@@ -444,6 +553,9 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
     this.syncStatus = const Value.absent(),
     this.syncErrorMessage = const Value.absent(),
     this.rowVersion = const Value.absent(),
+    this.slaStatus = const Value.absent(),
+    this.slaNextCheckpointUtc = const Value.absent(),
+    this.slaAccumulatedMinutes = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         tenantId = Value(tenantId),
@@ -464,6 +576,9 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
     Expression<int>? syncStatus,
     Expression<String>? syncErrorMessage,
     Expression<String>? rowVersion,
+    Expression<int>? slaStatus,
+    Expression<DateTime>? slaNextCheckpointUtc,
+    Expression<int>? slaAccumulatedMinutes,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -478,6 +593,11 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
       if (syncStatus != null) 'sync_status': syncStatus,
       if (syncErrorMessage != null) 'sync_error_message': syncErrorMessage,
       if (rowVersion != null) 'row_version': rowVersion,
+      if (slaStatus != null) 'sla_status': slaStatus,
+      if (slaNextCheckpointUtc != null)
+        'sla_next_checkpoint_utc': slaNextCheckpointUtc,
+      if (slaAccumulatedMinutes != null)
+        'sla_accumulated_minutes': slaAccumulatedMinutes,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -494,6 +614,9 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
       Value<int>? syncStatus,
       Value<String?>? syncErrorMessage,
       Value<String?>? rowVersion,
+      Value<int?>? slaStatus,
+      Value<DateTime?>? slaNextCheckpointUtc,
+      Value<int?>? slaAccumulatedMinutes,
       Value<int>? rowid}) {
     return LocalWorkOrdersCompanion(
       id: id ?? this.id,
@@ -507,6 +630,10 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
       syncStatus: syncStatus ?? this.syncStatus,
       syncErrorMessage: syncErrorMessage ?? this.syncErrorMessage,
       rowVersion: rowVersion ?? this.rowVersion,
+      slaStatus: slaStatus ?? this.slaStatus,
+      slaNextCheckpointUtc: slaNextCheckpointUtc ?? this.slaNextCheckpointUtc,
+      slaAccumulatedMinutes:
+          slaAccumulatedMinutes ?? this.slaAccumulatedMinutes,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -547,6 +674,17 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
     if (rowVersion.present) {
       map['row_version'] = Variable<String>(rowVersion.value);
     }
+    if (slaStatus.present) {
+      map['sla_status'] = Variable<int>(slaStatus.value);
+    }
+    if (slaNextCheckpointUtc.present) {
+      map['sla_next_checkpoint_utc'] =
+          Variable<DateTime>(slaNextCheckpointUtc.value);
+    }
+    if (slaAccumulatedMinutes.present) {
+      map['sla_accumulated_minutes'] =
+          Variable<int>(slaAccumulatedMinutes.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -567,6 +705,9 @@ class LocalWorkOrdersCompanion extends UpdateCompanion<LocalWorkOrder> {
           ..write('syncStatus: $syncStatus, ')
           ..write('syncErrorMessage: $syncErrorMessage, ')
           ..write('rowVersion: $rowVersion, ')
+          ..write('slaStatus: $slaStatus, ')
+          ..write('slaNextCheckpointUtc: $slaNextCheckpointUtc, ')
+          ..write('slaAccumulatedMinutes: $slaAccumulatedMinutes, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -599,6 +740,9 @@ typedef $$LocalWorkOrdersTableCreateCompanionBuilder = LocalWorkOrdersCompanion
   Value<int> syncStatus,
   Value<String?> syncErrorMessage,
   Value<String?> rowVersion,
+  Value<int?> slaStatus,
+  Value<DateTime?> slaNextCheckpointUtc,
+  Value<int?> slaAccumulatedMinutes,
   Value<int> rowid,
 });
 typedef $$LocalWorkOrdersTableUpdateCompanionBuilder = LocalWorkOrdersCompanion
@@ -614,6 +758,9 @@ typedef $$LocalWorkOrdersTableUpdateCompanionBuilder = LocalWorkOrdersCompanion
   Value<int> syncStatus,
   Value<String?> syncErrorMessage,
   Value<String?> rowVersion,
+  Value<int?> slaStatus,
+  Value<DateTime?> slaNextCheckpointUtc,
+  Value<int?> slaAccumulatedMinutes,
   Value<int> rowid,
 });
 
@@ -660,6 +807,17 @@ class $$LocalWorkOrdersTableFilterComposer
 
   ColumnFilters<String> get rowVersion => $composableBuilder(
       column: $table.rowVersion, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get slaStatus => $composableBuilder(
+      column: $table.slaStatus, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get slaNextCheckpointUtc => $composableBuilder(
+      column: $table.slaNextCheckpointUtc,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get slaAccumulatedMinutes => $composableBuilder(
+      column: $table.slaAccumulatedMinutes,
+      builder: (column) => ColumnFilters(column));
 }
 
 class $$LocalWorkOrdersTableOrderingComposer
@@ -705,6 +863,17 @@ class $$LocalWorkOrdersTableOrderingComposer
 
   ColumnOrderings<String> get rowVersion => $composableBuilder(
       column: $table.rowVersion, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get slaStatus => $composableBuilder(
+      column: $table.slaStatus, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get slaNextCheckpointUtc => $composableBuilder(
+      column: $table.slaNextCheckpointUtc,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get slaAccumulatedMinutes => $composableBuilder(
+      column: $table.slaAccumulatedMinutes,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$LocalWorkOrdersTableAnnotationComposer
@@ -748,6 +917,15 @@ class $$LocalWorkOrdersTableAnnotationComposer
 
   GeneratedColumn<String> get rowVersion => $composableBuilder(
       column: $table.rowVersion, builder: (column) => column);
+
+  GeneratedColumn<int> get slaStatus =>
+      $composableBuilder(column: $table.slaStatus, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get slaNextCheckpointUtc => $composableBuilder(
+      column: $table.slaNextCheckpointUtc, builder: (column) => column);
+
+  GeneratedColumn<int> get slaAccumulatedMinutes => $composableBuilder(
+      column: $table.slaAccumulatedMinutes, builder: (column) => column);
 }
 
 class $$LocalWorkOrdersTableTableManager extends RootTableManager<
@@ -788,6 +966,9 @@ class $$LocalWorkOrdersTableTableManager extends RootTableManager<
             Value<int> syncStatus = const Value.absent(),
             Value<String?> syncErrorMessage = const Value.absent(),
             Value<String?> rowVersion = const Value.absent(),
+            Value<int?> slaStatus = const Value.absent(),
+            Value<DateTime?> slaNextCheckpointUtc = const Value.absent(),
+            Value<int?> slaAccumulatedMinutes = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               LocalWorkOrdersCompanion(
@@ -802,6 +983,9 @@ class $$LocalWorkOrdersTableTableManager extends RootTableManager<
             syncStatus: syncStatus,
             syncErrorMessage: syncErrorMessage,
             rowVersion: rowVersion,
+            slaStatus: slaStatus,
+            slaNextCheckpointUtc: slaNextCheckpointUtc,
+            slaAccumulatedMinutes: slaAccumulatedMinutes,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -816,6 +1000,9 @@ class $$LocalWorkOrdersTableTableManager extends RootTableManager<
             Value<int> syncStatus = const Value.absent(),
             Value<String?> syncErrorMessage = const Value.absent(),
             Value<String?> rowVersion = const Value.absent(),
+            Value<int?> slaStatus = const Value.absent(),
+            Value<DateTime?> slaNextCheckpointUtc = const Value.absent(),
+            Value<int?> slaAccumulatedMinutes = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               LocalWorkOrdersCompanion.insert(
@@ -830,6 +1017,9 @@ class $$LocalWorkOrdersTableTableManager extends RootTableManager<
             syncStatus: syncStatus,
             syncErrorMessage: syncErrorMessage,
             rowVersion: rowVersion,
+            slaStatus: slaStatus,
+            slaNextCheckpointUtc: slaNextCheckpointUtc,
+            slaAccumulatedMinutes: slaAccumulatedMinutes,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

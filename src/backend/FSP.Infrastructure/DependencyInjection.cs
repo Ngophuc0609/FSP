@@ -24,6 +24,8 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
         services.AddScoped<IBlobStorageService, AzureBlobStorageService>();
 
+        services.AddHostedService<SlaSweepWorker>();
+
         return services;
     }
 }
